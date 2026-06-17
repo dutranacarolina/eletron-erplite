@@ -1,2 +1,10 @@
-// See the Electron documentation for details on how to use preload scripts:
-// https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
+import { contextBridge, ipcRenderer } from 'electron';
+import { version } from '../../package.json';
+
+contextBridge.exposeInMainWorld('api', {
+  status: 'online',
+  version,
+  login: (email: string, password: string) => {
+    return ipcRenderer.invoke('auth:login', email, password);
+  },
+});

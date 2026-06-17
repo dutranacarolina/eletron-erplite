@@ -5,6 +5,9 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
     "noEmit": false,
     "strict": true,
     "outDir": "dist",
@@ -12,5 +15,6 @@
     "lib": ["DOM", "ESNext"],
     "esModuleInterop": true,
     "skipLibCheck": true
-  }
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts"]
 }

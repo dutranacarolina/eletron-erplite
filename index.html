@@ -7,6 +7,19 @@
   <body>
     <h1>💖 Hello World!</h1>
     <p>Welcome to your Electron application.</p>
+
+    <form method="post" id="login-form">
+      <p>
+        <label for="email">E-mail:</label>
+        <input type="text" id="email" name="email" />
+      </p>
+      <p>
+        <label for="password">Senha:</label>
+        <input type="password" id="password" name="password" />
+      </p>
+      <button type="submit">Entrar</button>
+    </form>
+
     <script type="module" src="/src/renderer/index.ts"></script>
   </body>
 </html>
