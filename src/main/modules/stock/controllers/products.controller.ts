@@ -6,12 +6,22 @@ import { UpdateProductDto } from '../dtos/update-product.dto';
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
-  index() {
-    return this.productsService.listProducts();
+  index(filters?: {
+    name?: string;
+    sku?: string;
+    quantity?: number;
+    price?: number;
+  }) {
+    return this.productsService.listProducts(filters);
   }
 
-  list(){
-    return this.productsService.listProducts();
+  list(filters?: {
+    name?: string;
+    sku?: string;
+    quantity?: number;
+    price?: number;
+  }){
+    return this.productsService.listProducts(filters);
   }
 
   async find(id: string ){

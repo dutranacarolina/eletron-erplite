@@ -72,16 +72,79 @@ it('deve lançar erro quando o nome não for informado', async () => {
   ).rejects.toThrow('Nome obrigatório');
 });
 
+it('deve retornar a lista usando o merodo list', async () => {
+  const fakeProducts = [
+    { id: '1', name: 'Notebook'},
+  ];
+
+  mockService.listProducts.mockResolvedValue(fakeProducts);
+
+  const result = await controller.list();
+
+  expect(mockService.listProducts).toHaveBeenCalledTimes(1);
+  expect(result).toEqual(fakeProducts);
+});
+
 it('deve lançar erro quando o preço for invalido', async () => {
   await expect(
     controller.create({
       name: 'Notebook',
       sku: '123',
-      quantity: 10,
+      quantity: 10, 
       price: 0,
       sellPrice: 3500,
     })
   ).rejects.toThrow('Preço inválido');
+});
+
+it('deve atualizar um produto', async () => {
+  const data = {
+    name: 'Notebook',
+    price: 4000,
+  };
+
+  const updated = {
+    id: '1',
+    ...data,
+  };
+
+  mockService.updateProduct.mockResolvedValue(updated);
+
+  const result = await controller.update('1', data);
+
+  expect(mockService.updateProduct).toHaveBeenCalledWith('1', data);
+  expect(result).toEqual(updated);
+});
+
+it('deve lançar erro qaundo o ID do update for inválido', async () => {
+  expect(() => {
+    controller.update('', {});
+}).toThrow('ID inválido');
+});
+
+it('deve deletar um produto', async () => {
+  mockService.deleteProduct.mockResolvedValue({
+    success: true,
+  });
+
+  const result = await controller.delete('1');
+
+  expect(mockService.deleteProduct).toHaveBeenCalledWith('1');
+  expect(result).toEqual({
+    success: true,
+  });
+});
+
+it('deve lançar erro quando o ID do delete for inválido', async () => {
+  expect( () => {
+    controller.delete('');
+}).toThrow('ID inválido');
+});
+
+it('deve lançar erro quando o ID do find for inválido', async () => {
+  await expect(
+    controller.find('')
+  ).rejects.toThrow('ID inválido');
 });
 
 });

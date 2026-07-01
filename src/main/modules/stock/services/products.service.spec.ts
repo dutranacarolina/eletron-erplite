@@ -132,6 +132,83 @@ it('deve excluir um produto', async () => {
 
   expect(mockRepository.delete).toHaveBeenCalledWith('1');
   expect(result).toEqual({success: true});
-})
+});
+
+it('deve listar produtos filtrando por nome', async () => {
+  mockRepository.find.mockResolvedValue([]);
+
+  await service.listProducts({
+    name: 'Note',
+  });
+
+  expect(mockRepository.find).toHaveBeenCalledWith({
+    where: {
+      name: expect.anything(),
+    },
+  });
+});
+
+it('deve listar produtos filtrando por nome', async () => {
+  mockRepository.find.mockResolvedValue([]);
+
+  await service.listProducts({
+    sku: 'ABC',
+  });
+
+  expect(mockRepository.find).toHaveBeenCalledWith({
+    where: {
+      sku: expect.anything(),
+    },
+  });
+});
+
+it('deve lançar erro quando o SKU já existir', async () => {
+  mockRepository.findOne.mockResolvedValue({
+    id: '1',
+    sku: 'ABC123',
+  });
+
+  await expect(
+    service.createProduct({
+    name: 'Notebook',
+    sku: 'ABC123',
+    quantity: 10,
+    price: 3000,
+    sellPrice: 3500,
+    })
+  ).rejects.toThrow('SKU já cadastrado');
+
+  expect(mockRepository.findOne).toHaveBeenCalledTimes(1);
+});
+
+it('deve lançar erro quando o preço for maior que o preço de venda', async () => {
+  mockRepository.findOne.mockResolvedValue(null);
+
+  await expect(
+    service.createProduct({
+      name: 'Notebook',
+      sku: 'ABC123',
+      quantity: 10,
+      price: 4000,
+      sellPrice: 3000,
+    })
+  ).rejects.toThrow('O preço não pode ser maior que o preço de venda');
+});
+
+it('deve lançar erro quando a quantidade for menor que zero', async () => {
+  mockRepository.findOne.mockResolvedValue(null);
+
+  await expect(
+    service.createProduct({
+      name: 'Notebook',
+      sku: 'ABC123',
+      quantity: -5,
+      price: 3000,
+      sellPrice: 3500,
+    })
+  ).rejects.toThrow('Quantidade não pode ser menor que zero');
+});
+
+
 
 });
