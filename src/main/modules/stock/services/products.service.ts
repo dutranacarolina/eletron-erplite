@@ -22,11 +22,11 @@ export class ProductsService {
       where.sku = Like (`%${filters.sku}%`);
     }
 
-     if (filters?.quantity !== undefined) {
+     if (filters?.quantity != null) {
       where.quantity = filters.quantity;
     }
 
-     if (filters?.price !== undefined) {
+     if (filters?.price != null) {
       where.price = filters.price;
     }
     return await this.productRepository.find({ where });
@@ -78,15 +78,13 @@ export class ProductsService {
       }
     }
 
-    if (
-      data.price !== undefined &&
-      data.sellPrice !== undefined &&
-      data.price > data.sellPrice
-    ){
-      throw new Error('O preço não pode ser maior que o preço de venda');
+    if (data.price != null && data.sellPrice != null){
+      if (data.price > data.sellPrice){
+        throw new Error('O preço não pode ser maior que o preço de venda');
+      }
     }
 
-    if (data.quantity !== undefined && data.quantity < 0 ){
+    if (data.quantity != null && data.quantity < 0 ){
       throw new Error('Quantidade não pode ser menor que zero');
     }
 
